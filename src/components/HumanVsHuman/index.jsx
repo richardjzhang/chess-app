@@ -1,8 +1,6 @@
 // @flow
 
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import * as Chess from 'chess.js';
 import Chessboard from 'chessboardjsx';
 
@@ -31,21 +29,20 @@ const squareStyling = ({ pieceSquare, history }) => {
 };
 
 class HumanVsHuman extends React.Component<Props, State> {
-  static propTypes = { children: PropTypes.func };
-
-  state = {
-    fen: 'start',
-    // square styles for active drop square
-    dropSquareStyle: {},
-    // custom square styles
-    squareStyles: {},
-    // square with the currently clicked piece
-    pieceSquare: '',
-    // currently clicked square
-    square: '',
-    // array of past game moves
-    history: [],
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      fen: 'start',
+      // square styles for active drop square
+      dropSquareStyle: {},
+      // custom square styles
+      squareStyles: {},
+      // square with the currently clicked piece
+      pieceSquare: '',
+      // array of past game moves
+      history: [],
+    };
+  }
 
   componentDidMount() {
     this.game = new Chess();
@@ -62,22 +59,19 @@ class HumanVsHuman extends React.Component<Props, State> {
   highlightSquare = (sourceSquare, squaresToHighlight) => {
     const { history, pieceSquare } = this.state;
     const highlightStyles = [sourceSquare, ...squaresToHighlight].reduce(
-      (a, c) => {
-        return {
-          ...a,
-          ...{
-            [c]: {
-              background:
-                'radial-gradient(circle, #fffc00 36%, transparent 40%)',
-              borderRadius: '50%',
-            },
+      (a, c) => ({
+        ...a,
+        ...{
+          [c]: {
+            background: 'radial-gradient(circle, #fffc00 36%, transparent 40%)',
+            borderRadius: '50%',
           },
-          ...squareStyling({
-            history,
-            pieceSquare,
-          }),
-        };
-      },
+        },
+        ...squareStyling({
+          history,
+          pieceSquare,
+        }),
+      }),
       {},
     );
 
@@ -194,7 +188,7 @@ export default function WithMoveValidation() {
         }) => (
           <Chessboard
             id="humanVsHuman"
-            width={320}
+            width={450}
             position={position}
             onDrop={onDrop}
             onMouseOverSquare={onMouseOverSquare}

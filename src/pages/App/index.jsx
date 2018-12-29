@@ -3,11 +3,11 @@
 import React from 'react';
 
 import './App.css';
-import MoveValidation from 'components/MoveValidation';
+import HumanVsHuman from 'components/HumanVsHuman';
 
 const App = () => (
   <div className="container">
-    <MoveValidation />
+    <HumanVsHuman />
   </div>
 );
 
