@@ -1,0 +1,25 @@
+{
+  "presets": ["env", "react", "flow", "es2015"],
+  "plugins": [
+    "transform-object-rest-spread",
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": true
+      }
+    ],
+    "transform-class-properties",
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "components": "./components",
+          "pages": "./pages"
+        },
+        "extensions": [".js", ".jsx"]
+      }
+    ]
+  ]
+}
