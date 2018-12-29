@@ -3,11 +3,11 @@
 import React from 'react';
 
 import './App.css';
-import Random from 'components/Random';
+import MoveValidation from 'components/MoveValidation';
 
 const App = () => (
   <div className="container">
-    <Random />
+    <MoveValidation />
   </div>
 );
 
