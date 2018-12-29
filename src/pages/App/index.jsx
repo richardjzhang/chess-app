@@ -3,11 +3,11 @@
 import React from 'react';
 
 import './App.css';
-import Random from 'components/Random';
+import HumanVsHuman from 'components/HumanVsHuman';
 
 const App = () => (
   <div className="container">
-    <Random />
+    <HumanVsHuman />
   </div>
 );
 
