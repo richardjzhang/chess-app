@@ -4,6 +4,7 @@
     "transform-object-rest-spread",
     [
       "transform-runtime",
+      "styled-jsx/babel",
       {
         "polyfill": false,
         "regenerator": true
