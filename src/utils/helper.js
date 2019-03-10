@@ -118,15 +118,12 @@ export const minMax = (
       bestMove,
       bestMoveValue,
     );
-
-    if (isMaximizingPlayer) {
-      // Look for moves that maximize position
-      if (value > bestMoveValue) {
-        bestMoveValue = value;
-        bestMove = move;
-      }
+    // Look for moves that maximize position
+    if (value > bestMoveValue) {
+      bestMoveValue = value;
+      bestMove = move;
       alpha = Math.max(alpha, value);
-    } else if (value < bestMoveValue) {
+    } else {
       bestMoveValue = value;
       bestMove = move;
       beta = Math.min(beta, value);
