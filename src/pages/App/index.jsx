@@ -4,6 +4,8 @@ import React, { Fragment } from 'react';
 
 import HumanVsHuman from 'components/HumanVsHuman';
 import Random from 'components/Random';
+import Computer from 'components/HumanVsComputer';
+import HumanVsRandom from 'components/HumanVsRandom';
 import { colors, fontSize, fontWeight, gutters } from 'utils/theme';
 
 type Props = {};
@@ -19,8 +21,13 @@ class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      type: 'human',
-      options: { human: 'Human', random: 'Random' },
+      type: 'computer',
+      options: {
+        human: 'Human',
+        random: 'Random',
+        computer: 'Computer',
+        playRandom: 'Dumb Computer',
+      },
     };
   }
 
@@ -36,6 +43,10 @@ class App extends React.Component<Props, State> {
       switch (type) {
         case 'human':
           return <HumanVsHuman />;
+        case 'computer':
+          return <Computer />;
+        case 'playRandom':
+          return <HumanVsRandom />;
         default:
           return <Random />;
       }
@@ -46,6 +57,7 @@ class App extends React.Component<Props, State> {
           {Object.keys(options).map(key => (
             /* eslint-disable */
             <div
+              key={key}
               className={type === key ? 'buttonSelected' : 'button'}
               onClick={() => this.changeGameType(key)}
             >
@@ -59,7 +71,7 @@ class App extends React.Component<Props, State> {
 
         <style jsx>{`
           .buttonSelected {
-            width: ${gutters.xlarge * 2}px;
+            min-width: ${gutters.xlarge * 2}px;
             cursor: pointer;
             margin: 0 ${gutters.medium}px;
             border-radius: ${gutters.xsmall}px;
@@ -70,9 +82,10 @@ class App extends React.Component<Props, State> {
             font-size: ${fontSize.description}px;
             color: ${colors.white};
             font-weight: ${fontWeight.bold};
+            padding: 0 ${gutters.small}px;
           }
           .button {
-            width: 96px;
+            min-width: 96px;
             cursor: pointer;
             margin: 0 ${gutters.medium}px;
             border-radius: ${gutters.xsmall}px;
@@ -81,6 +94,7 @@ class App extends React.Component<Props, State> {
             justify-content: center;
             align-items: center;
             font-size: ${fontSize.description}px;
+            padding: 0 ${gutters.small}px;
           }
           .container {
             display: flex;

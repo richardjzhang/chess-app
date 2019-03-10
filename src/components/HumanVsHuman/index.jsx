@@ -90,6 +90,7 @@ class HumanVsHuman extends React.Component<Props, State> {
 
     // illegal move
     if (move === null) return;
+
     this.setState(({ history, pieceSquare }) => ({
       fen: this.game.fen(),
       history: this.game.history({ verbose: true }),
@@ -120,10 +121,9 @@ class HumanVsHuman extends React.Component<Props, State> {
   // central squares get diff dropSquareStyles
   onDragOverSquare = square => {
     this.setState({
-      dropSquareStyle:
-        square === 'e4' || square === 'd4' || square === 'e5' || square === 'd5'
-          ? { backgroundColor: 'cornFlowerBlue' }
-          : { boxShadow: 'inset 0 0 1px 4px rgb(255, 255, 0)' },
+      dropSquareStyle: ['e4', 'e5', 'd4', 'd5'].includes(square)
+        ? { backgroundColor: 'cornFlowerBlue' }
+        : { boxShadow: 'inset 0 0 1px 4px rgb(255, 255, 0)' },
     });
   };
 
@@ -133,6 +133,7 @@ class HumanVsHuman extends React.Component<Props, State> {
       pieceSquare: square,
     }));
     const { pieceSquare } = this.state;
+
     const move = this.game.move({
       from: pieceSquare,
       to: square,
