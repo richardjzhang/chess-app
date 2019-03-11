@@ -94,7 +94,7 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     this.setState({ fen: this.game.fen() });
 
-    window.setTimeout(this.makeComputerMoveHard, 10000);
+    window.setTimeout(this.makeComputerMoveHard, 1000);
   };
 
   onSquareClick = square => {
@@ -114,7 +114,7 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     this.setState({ fen: this.game.fen() });
 
-    window.setTimeout(this.makeComputerMoveHard, 10000);
+    window.setTimeout(this.makeComputerMoveHard, 1000);
   };
 
   render() {
