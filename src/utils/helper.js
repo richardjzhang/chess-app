@@ -86,7 +86,7 @@ export const minMax = (
   if (depth === 0) {
     const board = convertFen(game.fen().split(''));
     value = evaluateBoard(board, playerColor);
-    return [value, possibleMoves[0]];
+    return [value, null];
   }
 
   // Set random order for possible moves
@@ -101,14 +101,14 @@ export const minMax = (
     // Make the move, but undo before exiting loop
     game.move(move);
     // Recursively get the value from this move
-    [value, bestMove] = minMax(
+    value = minMax(
       depth - 1,
       game,
       playerColor,
       alpha,
       beta,
-      isMaximizingPlayer,
-    );
+      !isMaximizingPlayer,
+    )[0];
     // Log the value of this move
     console.log(
       isMaximizingPlayer ? 'Max: ' : 'Min: ',
@@ -119,13 +119,19 @@ export const minMax = (
       bestMoveValue,
     );
     // Look for moves that maximize position
-    if (value > bestMoveValue) {
-      bestMoveValue = value;
-      bestMove = move;
+    if (isMaximizingPlayer) {
+      // Look for moves that maximize position
+      if (value > bestMoveValue) {
+        bestMoveValue = value;
+        bestMove = move;
+      }
       alpha = Math.max(alpha, value);
     } else {
-      bestMoveValue = value;
-      bestMove = move;
+      // Look for moves that minimize position
+      if (value < bestMoveValue) {
+        bestMoveValue = value;
+        bestMove = move;
+      }
       beta = Math.min(beta, value);
     }
     // Undo previous move
@@ -136,5 +142,5 @@ export const minMax = (
       break;
     }
   }
-  return [value, bestMove];
+  return [bestMoveValue, bestMove || possibleMoves[0]];
 };
