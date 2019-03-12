@@ -1,13 +1,14 @@
 // @flow
 
 import React from 'react';
+import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
 type Props = {
-  children?: React.Node,
+  children?: Node,
 };
-type State = { fen: string };
+type State = { fen: string, squareStyles: Object, pieceSquare: string };
 
 class HumanVsRandom extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -18,6 +19,8 @@ class HumanVsRandom extends React.Component<Props, State> {
   componentDidMount() {
     this.game = new Chess();
   }
+
+  game = () => {};
 
   makeRandomMove = () => {
     const possibleMoves = this.game.moves();
@@ -60,13 +63,14 @@ class HumanVsRandom extends React.Component<Props, State> {
   };
 
   onSquareClick = square => {
+    const { pieceSquare } = this.state;
     this.setState({
       squareStyles: { [square]: { backgroundColor: 'DarkTurquoise' } },
       pieceSquare: square,
     });
 
     const move = this.game.move({
-      from: this.state.pieceSquare,
+      from: pieceSquare,
       to: square,
       promotion: 'q', // always promote to a queen for example simplicity
     });
@@ -81,7 +85,8 @@ class HumanVsRandom extends React.Component<Props, State> {
 
   render() {
     const { fen, squareStyles } = this.state;
-    return this.props.children({
+    const { children } = this.props;
+    return children({
       position: fen,
       onDrop: this.onDrop,
       onSquareClick: this.onSquareClick,

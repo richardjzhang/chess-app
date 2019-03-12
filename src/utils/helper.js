@@ -70,12 +70,12 @@ export const evaluateBoard = (
 };
 
 export const minMax = (
-  depth,
-  game,
-  playerColor,
-  alpha,
-  beta,
-  isMaximizingPlayer,
+  depth: number,
+  game: Object,
+  playerColor: string,
+  alpha: number,
+  beta: number,
+  isMaximizingPlayer: boolean,
 ) => {
   let value;
   // Recursive case: search possible moves

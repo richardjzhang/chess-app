@@ -1,25 +1,36 @@
 // @flow
 
 import React from 'react';
+import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
 import { convertFen, evaluateBoard, minMax } from 'utils/helper';
 
 type Props = {
-  children?: React.Node,
+  children?: Node,
 };
-type State = { fen: string, squareStyles: Object };
+type State = {
+  fen: string,
+  squareStyles: Object,
+  pieceSquare: Object,
+};
 
 class HumanVsComputer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { fen: 'start', squareStyles: {}, pieceSquare: '' };
+    this.state = {
+      fen: 'start',
+      squareStyles: {},
+      pieceSquare: '',
+    };
   }
 
   componentDidMount() {
     this.game = new Chess();
   }
+
+  game = () => {};
 
   makeComputerMoveEasy = () => {
     const possibleMoves = this.game.moves();
@@ -98,13 +109,14 @@ class HumanVsComputer extends React.Component<Props, State> {
   };
 
   onSquareClick = square => {
+    const { pieceSquare } = this.state;
     this.setState({
       squareStyles: { [square]: { backgroundColor: 'DarkTurquoise' } },
       pieceSquare: square,
     });
 
     const move = this.game.move({
-      from: this.state.pieceSquare,
+      from: pieceSquare,
       to: square,
       promotion: 'q', // always promote to a queen for example simplicity
     });

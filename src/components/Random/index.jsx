@@ -1,11 +1,12 @@
 // @flow
 
 import React from 'react';
+import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
 type Props = {
-  children?: React.Node,
+  children?: Node,
 };
 type State = { fen: string };
 
@@ -23,6 +24,8 @@ class RandomVsRandom extends React.Component<Props, State> {
   componentWillUnmount() {
     window.clearTimeout(this.timer());
   }
+
+  game = () => {};
 
   timer = () => window.setTimeout(this.makeRandomMove, 1000);
 

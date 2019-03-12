@@ -1,13 +1,20 @@
 // @flow
 
 import React from 'react';
+import type { Node } from 'react';
 import * as Chess from 'chess.js';
 import Chessboard from 'chessboardjsx';
 
 type Props = {
-  children?: React.Node,
+  children?: Node,
 };
-type State = { fen: string };
+type State = {
+  fen: string,
+  squareStyles: Object,
+  pieceSquare: Object,
+  dropSquareStyle: Object,
+  history: Object,
+};
 
 const squareStyling = ({ pieceSquare, history }) => {
   const sourceSquare = history.length && history[history.length - 1].from;
@@ -47,6 +54,8 @@ class HumanVsHuman extends React.Component<Props, State> {
   componentDidMount() {
     this.game = new Chess();
   }
+
+  game = () => {};
 
   // keep clicked square style and remove hint squares
   removeHighlightSquare = () => {
@@ -116,7 +125,7 @@ class HumanVsHuman extends React.Component<Props, State> {
     this.highlightSquare(square, squaresToHighlight);
   };
 
-  onMouseOutSquare = square => this.removeHighlightSquare(square);
+  onMouseOutSquare = () => this.removeHighlightSquare();
 
   // central squares get diff dropSquareStyles
   onDragOverSquare = square => {
