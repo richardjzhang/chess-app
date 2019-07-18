@@ -7,8 +7,10 @@ import * as Chess from 'chess.js';
 
 import { convertFen, evaluateBoard, minMax } from 'utils/helper';
 
+const DIFFICULTY = 2;
+
 type Props = {
-  children?: Node,
+  children?: Iterable<Node>,
 };
 type State = {
   fen: string,
@@ -72,7 +74,7 @@ class HumanVsComputer extends React.Component<Props, State> {
 
   makeComputerMoveHard = () => {
     const bestMove = minMax(
-      3,
+      DIFFICULTY,
       this.game,
       'b',
       Number.NEGATIVE_INFINITY,
