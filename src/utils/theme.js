@@ -9,6 +9,23 @@ export const colors = {
 
   // Blues
   diamondBlue: '#0ebfe9',
+
+  // Primary Colors
+  ebony: '#0D0D21',
+  malibu: '#62A6FF',
+  cornflowerBlue: '#5758F7',
+  saffron: '#F4B42E',
+  dodgerBlue: '#3B80FE',
+  black: '#000000',
+
+  // Greys
+  cloudBurst: '#21374D',
+  hitGray: '#9EACB2',
+  iron: '#D4D7D9',
+  porcelain: '#F1F2F3',
+  athensGrey: '#F9FAFB',
+  mirage: '#1D263B',
+  waikawaGray: '#575A89',
 };
 
 export const fontSize = {

@@ -3,9 +3,11 @@
 import React from 'react';
 import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
-import * as Chess from 'chess.js';
+import Chess from 'chess.js';
 
-import { convertFen, evaluateBoard, minMax } from 'utils/helper';
+import { colors } from 'utils/theme';
+
+import { minimaxRoot } from './helper';
 
 const DIFFICULTY = 2;
 
@@ -34,67 +36,31 @@ class HumanVsComputer extends React.Component<Props, State> {
 
   game = () => {};
 
-  makeComputerMoveEasy = () => {
-    const possibleMoves = this.game.moves();
-    possibleMoves.sort(() => 0.5 - Math.random());
-
-    // exit if the game is over
-    if (
-      this.game.game_over() === true ||
-      this.game.in_draw() === true ||
-      possibleMoves.length === 0
-    )
-      return;
-
-    // Search for move with highest value
-    let bestMoveSoFar = null;
-    let bestMoveValue = Number.NEGATIVE_INFINITY;
-    possibleMoves.forEach(move => {
-      this.game.move(move);
-      const board = convertFen(this.game.fen().split(''));
-      const moveValue = evaluateBoard(board, 'b');
-      if (moveValue > bestMoveValue) {
-        bestMoveSoFar = move;
-        bestMoveValue = moveValue;
-      }
-      this.game.undo();
-    });
-
-    this.game.move(bestMoveSoFar);
-    this.setState({
-      fen: this.game.fen(),
-      squareStyles: {
-        [this.game.history({ verbose: true })[this.game.history().length - 1]
-          .to]: {
-          backgroundColor: 'DarkTurquoise',
-        },
-      },
-    });
-  };
-
   makeComputerMoveHard = () => {
-    const bestMove = minMax(
-      DIFFICULTY,
-      this.game,
-      'b',
-      Number.NEGATIVE_INFINITY,
-      Number.POSITIVE_INFINITY,
-      true,
-    )[1];
+    const bestMove = minimaxRoot(DIFFICULTY, this.game, true, 'b');
     this.game.move(bestMove);
-    console.log(bestMove);
     this.setState({
       fen: this.game.fen(),
       squareStyles: {
         [this.game.history({ verbose: true })[this.game.history().length - 1]
           .to]: {
-          backgroundColor: 'DarkTurquoise',
+          backgroundColor: colors.cornflowerBlue,
         },
       },
     });
+
+    if (this.game.game_over()) {
+      alert('Game Over!');
+    }
   };
 
-  onDrop = ({ sourceSquare, targetSquare }) => {
+  onDrop = ({
+    sourceSquare,
+    targetSquare,
+  }: {
+    sourceSquare: string,
+    targetSquare: string,
+  }) => {
     // see if the move is legal
     const move = this.game.move({
       from: sourceSquare,
@@ -107,13 +73,13 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     this.setState({ fen: this.game.fen() });
 
-    window.setTimeout(this.makeComputerMoveHard, 1000);
+    window.setTimeout(this.makeComputerMoveHard, 1);
   };
 
-  onSquareClick = square => {
+  onSquareClick = (square: string) => {
     const { pieceSquare } = this.state;
     this.setState({
-      squareStyles: { [square]: { backgroundColor: 'DarkTurquoise' } },
+      squareStyles: { [square]: { backgroundColor: colors.cornflowerBlue } },
       pieceSquare: square,
     });
 
@@ -128,12 +94,14 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     this.setState({ fen: this.game.fen() });
 
-    window.setTimeout(this.makeComputerMoveHard, 1000);
+    window.setTimeout(this.makeComputerMoveHard, 1);
   };
 
   render() {
     const { fen, squareStyles } = this.state;
     const { children } = this.props;
+
+    /* $FlowFixMe */
     return children({
       position: fen,
       onDrop: this.onDrop,
@@ -145,23 +113,28 @@ class HumanVsComputer extends React.Component<Props, State> {
 
 export default function PlayComputerEngine() {
   return (
-    <div>
-      <HumanVsComputer>
-        {({ position, onDrop, onSquareClick, squareStyles }) => (
-          <Chessboard
-            width={450}
-            id="humanVsComputer"
-            position={position}
-            onDrop={onDrop}
-            boardStyle={{
-              borderRadius: '5px',
-              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-            }}
-            onSquareClick={onSquareClick}
-            squareStyles={squareStyles}
-          />
-        )}
-      </HumanVsComputer>
-    </div>
+    <HumanVsComputer>
+      {/* $FlowFixMe */}
+      {({ position, onDrop, onSquareClick, squareStyles }) => (
+        <Chessboard
+          id="humanVsComputer"
+          width={450}
+          position={position}
+          onDrop={onDrop}
+          boardStyle={{
+            borderRadius: '5px',
+            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+          }}
+          onSquareClick={onSquareClick}
+          squareStyles={squareStyles}
+          lightSquareStyle={{ backgroundColor: colors.athensGrey }}
+          darkSquareStyle={{ backgroundColor: colors.saffron }}
+          dropSquareStyle={{
+            boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
+          }}
+          showNotation={false}
+        />
+      )}
+    </HumanVsComputer>
   );
 }

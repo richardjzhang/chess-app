@@ -2,11 +2,11 @@
 
 import React, { Fragment } from 'react';
 
+import { colors, fontSize, fontWeight, gutters } from 'utils/theme';
 import HumanVsHuman from 'components/HumanVsHuman';
 import Random from 'components/Random';
 import Computer from 'components/HumanVsComputer';
 import HumanVsRandom from 'components/HumanVsRandom';
-import { colors, fontSize, fontWeight, gutters } from 'utils/theme';
 
 type Props = {};
 
