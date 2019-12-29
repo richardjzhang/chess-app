@@ -42,6 +42,15 @@ class HumanVsComputer extends React.Component<Props, State> {
   game = () => {};
 
   makeComputerMoveHard = () => {
+    if (
+      this.game.game_over() === true ||
+      this.game.in_draw() === true ||
+      this.game.moves().length === 0
+    ) {
+      alert('Game Over!');
+      return;
+    }
+
     const bestMove = minimaxRoot(DIFFICULTY, this.game, true, 'b');
     this.game.move(bestMove);
     this.setState(state => ({
@@ -54,10 +63,6 @@ class HumanVsComputer extends React.Component<Props, State> {
         },
       },
     }));
-
-    if (this.game.game_over()) {
-      alert('Game Over!');
-    }
   };
 
   onDrop = ({
