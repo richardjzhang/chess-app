@@ -6,7 +6,17 @@ import * as Chess from 'chess.js';
 import Chessboard from 'chessboardjsx';
 
 type Props = {
-  children?: Node,
+  children?: ({
+    position: string,
+    onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
+    onMouseOverSquare: (square: string) => void,
+    onMouseOutSquare: () => void,
+    squareStyles: Object,
+    dropSquareStyle: Object,
+    onDragOverSquare: (square: string) => void,
+    onSquareClick: (square: string) => void,
+    onSquareRightClick: (square: string) => void,
+  }) => Node,
 };
 type State = {
   fen: string,
@@ -167,6 +177,7 @@ class HumanVsHuman extends React.Component<Props, State> {
   render() {
     const { fen, dropSquareStyle, squareStyles } = this.state;
     const { children } = this.props;
+    if (children == null) return null;
     return children({
       squareStyles,
       position: fen,

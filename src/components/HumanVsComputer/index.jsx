@@ -12,7 +12,12 @@ import { minimaxRoot } from './helper';
 const DIFFICULTY = 2;
 
 type Props = {
-  children?: Iterable<Node>,
+  children?: ({
+    position: string,
+    onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
+    squareStyles: Object,
+    onSquareClick: (square: string) => void,
+  }) => Node,
 };
 type State = {
   fen: string,
@@ -39,7 +44,8 @@ class HumanVsComputer extends React.Component<Props, State> {
   makeComputerMoveHard = () => {
     const bestMove = minimaxRoot(DIFFICULTY, this.game, true, 'b');
     this.game.move(bestMove);
-    this.setState({
+    this.setState(state => ({
+      ...state,
       fen: this.game.fen(),
       squareStyles: {
         [this.game.history({ verbose: true })[this.game.history().length - 1]
@@ -47,7 +53,7 @@ class HumanVsComputer extends React.Component<Props, State> {
           backgroundColor: colors.cornflowerBlue,
         },
       },
-    });
+    }));
 
     if (this.game.game_over()) {
       alert('Game Over!');
@@ -101,7 +107,7 @@ class HumanVsComputer extends React.Component<Props, State> {
     const { fen, squareStyles } = this.state;
     const { children } = this.props;
 
-    /* $FlowFixMe */
+    if (children == null) return null;
     return children({
       position: fen,
       onDrop: this.onDrop,

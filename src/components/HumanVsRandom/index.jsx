@@ -6,7 +6,12 @@ import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
 type Props = {
-  children?: Node,
+  children?: ({
+    position: string,
+    onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
+    squareStyles: Object,
+    onSquareClick: (square: string) => void,
+  }) => Node,
 };
 type State = { fen: string, squareStyles: Object, pieceSquare: string };
 
@@ -86,6 +91,7 @@ class HumanVsRandom extends React.Component<Props, State> {
   render() {
     const { fen, squareStyles } = this.state;
     const { children } = this.props;
+    if (children == null) return null;
     return children({
       position: fen,
       onDrop: this.onDrop,

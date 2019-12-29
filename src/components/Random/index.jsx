@@ -6,7 +6,7 @@ import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
 type Props = {
-  children?: Node,
+  children?: ({ position: string }) => Node,
 };
 type State = { fen: string };
 
@@ -50,6 +50,7 @@ class RandomVsRandom extends React.Component<Props, State> {
   render() {
     const { fen } = this.state;
     const { children } = this.props;
+    if (children == null) return null;
     return children({ position: fen });
   }
 }
