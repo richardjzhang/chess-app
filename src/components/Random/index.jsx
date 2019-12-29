@@ -4,13 +4,12 @@ import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
-const game = new Chess();
-
 type Props = {
+  game: any,
   children?: ({ position: string }) => Node,
 };
 
-const RandomVsRandom = ({ children }: Props) => {
+const RandomVsRandom = ({ game, children }: Props) => {
   const [fen, setFen] = useState('start');
 
   const makeRandomMove = () => {
@@ -38,21 +37,24 @@ const RandomVsRandom = ({ children }: Props) => {
   return children({ position: fen });
 };
 
-const RandomVsRandomGame = () => (
-  <RandomVsRandom>
-    {({ position }) => (
-      <Chessboard
-        width={450}
-        id="random"
-        position={position}
-        transitionDuration={300}
-        boardStyle={{
-          borderRadius: '5px',
-          boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-        }}
-      />
-    )}
-  </RandomVsRandom>
-);
+const RandomVsRandomGame = () => {
+  const game = new Chess();
+  return (
+    <RandomVsRandom game={game}>
+      {({ position }) => (
+        <Chessboard
+          width={450}
+          id="random"
+          position={position}
+          transitionDuration={300}
+          boardStyle={{
+            borderRadius: '5px',
+            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+          }}
+        />
+      )}
+    </RandomVsRandom>
+  );
+};
 
 export default RandomVsRandomGame;

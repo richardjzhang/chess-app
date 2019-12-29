@@ -5,9 +5,8 @@ import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
-const game = new Chess();
-
 type Props = {
+  game: any,
   children?: ({
     position: string,
     onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
@@ -16,7 +15,7 @@ type Props = {
   }) => Node,
 };
 
-const HumanVsRandom = ({ children }: Props) => {
+const HumanVsRandom = ({ game, children }: Props) => {
   const [computerMove, setComputerMove] = useState(false);
   const [fen, setFen] = useState('start');
   const [squareStyles, setSquareStyles] = useState({});
@@ -30,8 +29,10 @@ const HumanVsRandom = ({ children }: Props) => {
       game.game_over() === true ||
       game.in_draw() === true ||
       possibleMoves.length === 0
-    )
+    ) {
+      alert('Game Over!');
       return;
+    }
 
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
     game.move(possibleMoves[randomIndex]);
@@ -91,23 +92,26 @@ const HumanVsRandom = ({ children }: Props) => {
   });
 };
 
-const PlayRandomMoveEngine = () => (
-  <HumanVsRandom>
-    {({ position, onDrop, onSquareClick, squareStyles }) => (
-      <Chessboard
-        width={450}
-        id="humanVsRandom"
-        position={position}
-        onDrop={onDrop}
-        boardStyle={{
-          borderRadius: '5px',
-          boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-        }}
-        onSquareClick={onSquareClick}
-        squareStyles={squareStyles}
-      />
-    )}
-  </HumanVsRandom>
-);
+const PlayRandomMoveEngine = () => {
+  const game = new Chess();
+  return (
+    <HumanVsRandom game={game}>
+      {({ position, onDrop, onSquareClick, squareStyles }) => (
+        <Chessboard
+          width={450}
+          id="humanVsRandom"
+          position={position}
+          onDrop={onDrop}
+          boardStyle={{
+            borderRadius: '5px',
+            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+          }}
+          onSquareClick={onSquareClick}
+          squareStyles={squareStyles}
+        />
+      )}
+    </HumanVsRandom>
+  );
+};
 
 export default PlayRandomMoveEngine;
