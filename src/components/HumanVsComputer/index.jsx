@@ -125,7 +125,6 @@ class HumanVsComputer extends React.Component<Props, State> {
 export default function PlayComputerEngine() {
   return (
     <HumanVsComputer>
-      {/* $FlowFixMe */}
       {({ position, onDrop, onSquareClick, squareStyles }) => (
         <Chessboard
           id="humanVsComputer"

@@ -4,13 +4,14 @@ import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
+const game = new Chess();
+
 type Props = {
   children?: ({ position: string }) => Node,
 };
 
 const RandomVsRandom = ({ children }: Props) => {
   const [fen, setFen] = useState('start');
-  const game = new Chess();
 
   const makeRandomMove = () => {
     const possibleMoves = game.moves();
