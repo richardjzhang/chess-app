@@ -1,4 +1,4 @@
-This project runs a simple chess application run using a minmax alpha-beta pruning algorithm. You can find a live demo here - https://dm79t.csb.app/
+This project runs a simple chess application run using a minmax alpha-beta pruning algorithm.
 
 ## To start the project
 
