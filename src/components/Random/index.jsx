@@ -4,12 +4,15 @@ import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
 
+import { colors, fontWeight } from 'utils/theme';
+
 type Props = {
   game: any,
+  setGameIsOver: () => void,
   children?: ({ position: string }) => Node,
 };
 
-const RandomVsRandom = ({ game, children }: Props) => {
+const RandomVsRandom = ({ game, setGameIsOver, children }: Props) => {
   const [fen, setFen] = useState('start');
 
   const makeRandomMove = () => {
@@ -20,8 +23,10 @@ const RandomVsRandom = ({ game, children }: Props) => {
       game.game_over() === true ||
       game.in_draw() === true ||
       possibleMoves.length === 0
-    )
+    ) {
+      setGameIsOver();
       return;
+    }
 
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
     game.move(possibleMoves[randomIndex]);
@@ -39,21 +44,37 @@ const RandomVsRandom = ({ game, children }: Props) => {
 
 const RandomVsRandomGame = () => {
   const game = new Chess();
+  const [isGameOver, setIsGameOver] = React.useState(false);
+  const setGameIsOver = () => setIsGameOver(true);
+
   return (
-    <RandomVsRandom game={game}>
-      {({ position }) => (
-        <Chessboard
-          width={450}
-          id="random"
-          position={position}
-          transitionDuration={300}
-          boardStyle={{
-            borderRadius: '5px',
-            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-          }}
-        />
-      )}
-    </RandomVsRandom>
+    <React.Fragment>
+      <RandomVsRandom game={game} setGameIsOver={setGameIsOver}>
+        {({ position }) => (
+          <Chessboard
+            width={450}
+            id="random"
+            position={position}
+            transitionDuration={300}
+            boardStyle={{
+              borderRadius: '5px',
+              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+            }}
+          />
+        )}
+      </RandomVsRandom>
+      <div
+        style={{
+          position: 'absolute',
+          top: 120,
+          color: colors.cloudBurst,
+          fontSize: 32,
+          fontWeight: fontWeight.semiBold,
+        }}
+      >
+        {isGameOver ? 'Game over!' : "We're not very good"}
+      </div>
+    </React.Fragment>
   );
 };
 

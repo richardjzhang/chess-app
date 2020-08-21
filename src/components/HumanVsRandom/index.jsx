@@ -102,36 +102,32 @@ const PlayRandomMoveEngine = () => {
 
   return (
     <React.Fragment>
-      <div>
-        <HumanVsRandom game={game} setGameIsOver={setGameIsOver}>
-          {({ position, onDrop, onSquareClick, squareStyles }) => (
-            <Chessboard
-              width={450}
-              id="humanVsRandom"
-              position={position}
-              onDrop={onDrop}
-              boardStyle={{
-                borderRadius: '5px',
-                boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-              }}
-              onSquareClick={onSquareClick}
-              squareStyles={squareStyles}
-            />
-          )}
-        </HumanVsRandom>
-        {isGameOver && (
-          <div
-            style={{
-              marginTop: 20,
-              display: 'flex',
-              justifyContent: 'center',
-              color: colors.cloudBurst,
-              fontWeight: fontWeight.semiBold,
+      <HumanVsRandom game={game} setGameIsOver={setGameIsOver}>
+        {({ position, onDrop, onSquareClick, squareStyles }) => (
+          <Chessboard
+            width={450}
+            id="humanVsRandom"
+            position={position}
+            onDrop={onDrop}
+            boardStyle={{
+              borderRadius: '5px',
+              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
             }}
-          >
-            Game over!
-          </div>
+            onSquareClick={onSquareClick}
+            squareStyles={squareStyles}
+          />
         )}
+      </HumanVsRandom>
+      <div
+        style={{
+          position: 'absolute',
+          top: 120,
+          color: colors.cloudBurst,
+          fontSize: 32,
+          fontWeight: fontWeight.semiBold,
+        }}
+      >
+        {isGameOver ? 'Game over!' : "I'm not very good!"}
       </div>
     </React.Fragment>
   );

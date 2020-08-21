@@ -68,7 +68,7 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
   const newGameMoves = game.moves();
 
   if (isMaximisingPlayer) {
-    let bestMove = -9999;
+    let bestMove = -Infinity;
     newGameMoves.forEach(newGameMove => {
       game.move(newGameMove);
       bestMove = Math.max(
@@ -78,11 +78,10 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
       game.undo();
       const newAlpha = Math.max(alpha, bestMove);
       if (beta <= newAlpha) return bestMove;
-      return null;
     });
     return bestMove;
   }
-  let bestMove = 9999;
+  let bestMove = Infinity;
   newGameMoves.forEach(newGameMove => {
     game.move(newGameMove);
     bestMove = Math.min(
@@ -92,7 +91,6 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
     game.undo();
     const newBeta = Math.min(beta, bestMove);
     if (newBeta <= alpha) return bestMove;
-    return null;
   });
   return bestMove;
 };

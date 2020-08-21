@@ -9,10 +9,12 @@ import { colors, fontWeight } from 'utils/theme';
 
 import { minimaxRoot } from './helper';
 
-const DIFFICULTY = 2;
+const DIFFICULTY = 3;
 
 type Props = {
   setGameIsOver: () => void,
+  setComputerIsThinking: () => void,
+  setIsYourTurn: () => void,
   children?: ({
     position: string,
     onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
@@ -52,6 +54,7 @@ class HumanVsComputer extends React.Component<Props, State> {
       setGameIsOver();
       return;
     }
+    const { setIsYourTurn } = this.props;
 
     const bestMove = minimaxRoot(DIFFICULTY, this.game, true, 'b');
     this.game.move(bestMove);
@@ -65,6 +68,7 @@ class HumanVsComputer extends React.Component<Props, State> {
         },
       },
     }));
+    setIsYourTurn();
   };
 
   onDrop = ({
@@ -74,6 +78,8 @@ class HumanVsComputer extends React.Component<Props, State> {
     sourceSquare: string,
     targetSquare: string,
   }) => {
+    const { setComputerIsThinking } = this.props;
+    setComputerIsThinking();
     // see if the move is legal
     const move = this.game.move({
       from: sourceSquare,
@@ -86,10 +92,12 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     this.setState({ fen: this.game.fen() });
 
-    window.setTimeout(this.makeComputerMoveHard, 1);
+    window.setTimeout(this.makeComputerMoveHard, 1000);
   };
 
   onSquareClick = (square: string) => {
+    const { setComputerIsThinking } = this.props;
+    setComputerIsThinking();
     const { pieceSquare } = this.state;
     this.setState({
       squareStyles: { [square]: { backgroundColor: colors.cornflowerBlue } },
@@ -107,7 +115,7 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     this.setState({ fen: this.game.fen() });
 
-    window.setTimeout(this.makeComputerMoveHard, 1);
+    window.setTimeout(this.makeComputerMoveHard, 1000);
   };
 
   render() {
@@ -126,44 +134,52 @@ class HumanVsComputer extends React.Component<Props, State> {
 
 export default function PlayComputerEngine() {
   const [isGameOver, setIsGameOver] = React.useState(false);
+  const [isThinking, setIsThinking] = React.useState(false);
+
   const setGameIsOver = () => setIsGameOver(true);
+  const setIsYourTurn = () => setIsThinking(false);
+  const setComputerIsThinking = () => setIsThinking(true);
 
   return (
     <React.Fragment>
-      <div>
-        <HumanVsComputer setGameIsOver={setGameIsOver}>
-          {({ position, onDrop, onSquareClick, squareStyles }) => (
-            <Chessboard
-              id="humanVsComputer"
-              width={450}
-              position={position}
-              onDrop={onDrop}
-              boardStyle={{
-                borderRadius: '5px',
-                boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-              }}
-              onSquareClick={onSquareClick}
-              squareStyles={squareStyles}
-              dropSquareStyle={{
-                boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
-              }}
-              showNotation={false}
-            />
-          )}
-        </HumanVsComputer>
-        {isGameOver && (
-          <div
-            style={{
-              marginTop: 20,
-              display: 'flex',
-              justifyContent: 'center',
-              color: colors.cloudBurst,
-              fontWeight: fontWeight.semiBold,
+      <HumanVsComputer
+        setGameIsOver={setGameIsOver}
+        setComputerIsThinking={setComputerIsThinking}
+        setIsYourTurn={setIsYourTurn}
+      >
+        {({ position, onDrop, onSquareClick, squareStyles }) => (
+          <Chessboard
+            id="humanVsComputer"
+            width={450}
+            position={position}
+            onDrop={onDrop}
+            boardStyle={{
+              borderRadius: '5px',
+              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
             }}
-          >
-            Game over!
-          </div>
+            onSquareClick={onSquareClick}
+            squareStyles={squareStyles}
+            dropSquareStyle={{
+              boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
+            }}
+            showNotation={false}
+          />
         )}
+      </HumanVsComputer>
+      <div
+        style={{
+          position: 'absolute',
+          top: 120,
+          color: colors.cloudBurst,
+          fontSize: 32,
+          fontWeight: fontWeight.semiBold,
+        }}
+      >
+        {isGameOver
+          ? 'Game over!'
+          : isThinking
+          ? "I'm thinking..."
+          : 'Your turn'}
       </div>
     </React.Fragment>
   );
