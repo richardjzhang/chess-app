@@ -137,8 +137,6 @@ export default function PlayComputerEngine() {
           }}
           onSquareClick={onSquareClick}
           squareStyles={squareStyles}
-          lightSquareStyle={{ backgroundColor: colors.athensGrey }}
-          darkSquareStyle={{ backgroundColor: colors.saffron }}
           dropSquareStyle={{
             boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
           }}

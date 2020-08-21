@@ -2,7 +2,7 @@
 
 import React, { Fragment } from 'react';
 
-import { colors, fontSize, fontWeight, gutters } from 'utils/theme';
+import { colors, fontSize, gutters } from 'utils/theme';
 import HumanVsHuman from 'components/HumanVsHuman';
 import Random from 'components/Random';
 import Computer from 'components/HumanVsComputer';
@@ -23,10 +23,10 @@ class App extends React.Component<Props, State> {
     this.state = {
       type: 'computer',
       options: {
-        human: 'Human',
-        random: 'Random',
-        computer: 'Computer',
-        playRandom: 'Dumb Computer',
+        random: 'Random Moves',
+        computer: 'Human vs Computer',
+        playRandom: 'Human vs Dumb Computer',
+        human: 'Human vs Human',
       },
     };
   }
@@ -53,60 +53,59 @@ class App extends React.Component<Props, State> {
     };
     return (
       <Fragment>
-        <div className="header">
-          {Object.keys(options).map(key => (
-            /* eslint-disable */
-            <div
-              key={key}
-              className={type === key ? 'buttonSelected' : 'button'}
-              onClick={() => this.changeGameType(key)}
-            >
-              {options[key]}
-            </div>
-          ))}
-        </div>
-        <div className="container">
-          <Chess />
+        <div className="root">
+          <div className="chess-container">
+            <Chess />
+          </div>
+          <div className="buttons-container">
+            {Object.keys(options).map(key => (
+              /* eslint-disable */
+              <div
+                key={key}
+                className="button"
+                style={{
+                  color: type === key ? colors.white : colors.cloudBurst,
+                  backgroundColor: type === key ? colors.dodgerBlue : colors.white,
+                }}
+                onClick={() => this.changeGameType(key)}
+              >
+                {options[key]}
+              </div>
+            ))}
+          </div>
         </div>
 
         <style jsx>{`
-          .buttonSelected {
-            min-width: ${gutters.xlarge * 2}px;
-            cursor: pointer;
-            margin: 0 ${gutters.medium}px;
-            border-radius: ${gutters.xsmall}px;
-            background-color: ${colors.diamondBlue};
+          .root {
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: ${fontSize.description}px;
-            color: ${colors.white};
-            font-weight: ${fontWeight.bold};
-            padding: 0 ${gutters.small}px;
+            justify-content: center;
+            height: 100vh;
+            background-color: ${colors.cupid};
           }
           .button {
-            min-width: 96px;
+            height: 50px;
             cursor: pointer;
-            margin: 0 ${gutters.medium}px;
+            margin: ${gutters.small}px 0;
             border-radius: ${gutters.xsmall}px;
             background-color: ${colors.mischka};
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: ${fontSize.description}px;
-            padding: 0 ${gutters.small}px;
+            padding: 0 ${gutters.medium}px;
           }
-          .container {
+          .chess-container {
+            margin-right: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 500px;
           }
-          .header {
+          .buttons-container {
             display: flex;
             justify-content: center;
-            height: 50px;
-            margin-top: ${gutters.xlarge}px;
+            flex-direction: column;
+            margin: -${gutters.medium}px 0;
           }
         `}</style>
       </Fragment>

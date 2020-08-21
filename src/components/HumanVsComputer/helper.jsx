@@ -76,8 +76,9 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
         minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer, playerColor),
       );
       game.undo();
-      alpha = Math.max(alpha, bestMove);
-      if (beta <= alpha) return bestMove;
+      const newAlpha = Math.max(alpha, bestMove);
+      if (beta <= newAlpha) return bestMove;
+      return null;
     });
     return bestMove;
   }
@@ -89,8 +90,9 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
       minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer, playerColor),
     );
     game.undo();
-    beta = Math.min(beta, bestMove);
-    if (beta <= alpha) return bestMove;
+    const newBeta = Math.min(beta, bestMove);
+    if (newBeta <= alpha) return bestMove;
+    return null;
   });
   return bestMove;
 };

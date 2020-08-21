@@ -26,6 +26,12 @@ export const colors = {
   athensGrey: '#F9FAFB',
   mirage: '#1D263B',
   waikawaGray: '#575A89',
+
+  // Palette
+  sail: '#B7D8F9',
+  iceCold: '#B7F9D8',
+  dairyCream: '#F9D8B7',
+  cupid: '#F9B7D8',
 };
 
 export const fontSize = {
