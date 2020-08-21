@@ -35,7 +35,7 @@
     "eslint-config-mathspace": "^0.5.4",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-babel-module": "^4.0.0",
-    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-html": "^4.0.5",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
