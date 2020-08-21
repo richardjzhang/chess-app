@@ -3,7 +3,6 @@
 import React, { Fragment } from 'react';
 
 import { colors, fontSize, gutters } from 'utils/theme';
-import HumanVsHuman from 'components/HumanVsHuman';
 import Random from 'components/Random';
 import Computer from 'components/HumanVsComputer';
 import HumanVsRandom from 'components/HumanVsRandom';
@@ -21,12 +20,11 @@ class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      type: 'computer',
+      type: 'random',
       options: {
         random: 'Random Moves',
         computer: 'Human vs Computer',
         playRandom: 'Human vs Dumb Computer',
-        human: 'Human vs Human',
       },
     };
   }
@@ -41,14 +39,14 @@ class App extends React.Component<Props, State> {
     const { type, options } = this.state;
     const Chess = () => {
       switch (type) {
-        case 'human':
-          return <HumanVsHuman />;
         case 'computer':
           return <Computer />;
         case 'playRandom':
           return <HumanVsRandom />;
-        default:
+        case 'random':
           return <Random />;
+        default:
+          throw new Error('No such option');
       }
     };
     return (
