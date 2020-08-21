@@ -1,12 +1,17 @@
 This project runs a simple chess application run using a minmax alpha-beta pruning algorithm.
 
 ## To start the project
+1) Add a `.env` file with the following line
+```
+NODE_PATH=src/
+```
 
-In the project directory, you can run:
+2) In the project directory, run...
+```
+yarn start
+```
 
-### `yarn start`
-
-Runs the app in the development mode.<br>
+This uns the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
