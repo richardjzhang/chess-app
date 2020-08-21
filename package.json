@@ -2,7 +2,7 @@
   "name": "chessai",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://richardjzhang.github.io/chess-application",
+  "homepage": "http://richardjzhang.github.io/chess-app",
   "dependencies": {
     "chess.js": "^0.10.2",
     "chessboardjsx": "^2.2.0",
