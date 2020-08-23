@@ -115,7 +115,6 @@ export const getPieceValue = (
   x: number,
   y: number,
 ) => {
-  if (piece === null) return 0;
   return (
     pieceValue[piece.type].value +
     (piece.color === 'w'

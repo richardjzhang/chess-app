@@ -53,6 +53,11 @@ const HumanVsRandom = ({ game, setGameIsOver, width }: Props) => {
     if (move === null) return;
 
     setFen(game.fen());
+    setSquareStyles({
+      [game.history({ verbose: true })[game.history().length - 1].to]: {
+        backgroundColor: colors.cornflowerBlue,
+      },
+    });
     setComputerMove(true);
   };
 
@@ -70,6 +75,11 @@ const HumanVsRandom = ({ game, setGameIsOver, width }: Props) => {
     if (move === null) return;
 
     setFen(game.fen());
+    setSquareStyles({
+      [game.history({ verbose: true })[game.history().length - 1].to]: {
+        backgroundColor: colors.cornflowerBlue,
+      },
+    });
     setComputerMove(true);
   };
 

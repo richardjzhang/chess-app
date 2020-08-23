@@ -86,7 +86,16 @@ class HumanVsComputer extends React.Component<Props, State> {
     if (move === null) return;
     setComputerIsThinking();
 
-    this.setState({ fen: this.game.fen() });
+    this.setState(state => ({
+      ...state,
+      fen: this.game.fen(),
+      squareStyles: {
+        [this.game.history({ verbose: true })[this.game.history().length - 1]
+          .to]: {
+          backgroundColor: colors.cornflowerBlue,
+        },
+      },
+    }));
 
     window.setTimeout(this.makeComputerMoveHard, 1000);
   };
@@ -109,7 +118,16 @@ class HumanVsComputer extends React.Component<Props, State> {
     if (move === null) return;
     setComputerIsThinking();
 
-    this.setState({ fen: this.game.fen() });
+    this.setState(state => ({
+      ...state,
+      fen: this.game.fen(),
+      squareStyles: {
+        [this.game.history({ verbose: true })[this.game.history().length - 1]
+          .to]: {
+          backgroundColor: colors.cornflowerBlue,
+        },
+      },
+    }));
 
     window.setTimeout(this.makeComputerMoveHard, 1000);
   };
