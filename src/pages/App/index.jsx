@@ -150,7 +150,7 @@ const App = () => {
       <Media query={`(min-width: 900px)`}>
         {isDesktopView => (
           <Root>
-            <GameState>
+            <GameState style={{ fontSize: isDesktopView ? 32 : 24 }}>
               {getTitle({ gameType, isGameOver, isThinking })}
             </GameState>
             <Content
