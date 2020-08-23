@@ -29,6 +29,9 @@ type State = {
   pieceSquare: Object,
 };
 
+// I've kept this component as a class rather than a functional component
+// as there is a weird visual bug occurs where the Chessboard does not update
+// the position of the pieces when the player moves a piece
 class HumanVsComputer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -136,6 +139,7 @@ class HumanVsComputer extends React.Component<Props, State> {
         dropSquareStyle={{
           boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
         }}
+        transitionDuration={500}
       />
     );
   }
