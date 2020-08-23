@@ -20,6 +20,7 @@ const GameState = styled.div`
 
 const Root = styled.div`
   padding: 120px;
+  box-sizing: border-box;
   height: 100vh;
   background-color: ${colors.cupid};
 `;
