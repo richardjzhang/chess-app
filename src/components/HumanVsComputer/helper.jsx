@@ -102,7 +102,7 @@ export const minimaxRoot = (
   playerColor: string,
 ) => {
   const newGameMoves = game.moves();
-  let bestMove = -9999;
+  let bestMove = -Infinity;
   let bestMoveFound;
 
   newGameMoves.forEach(newGameMove => {
@@ -110,8 +110,8 @@ export const minimaxRoot = (
     const value = minimax(
       depth - 1,
       game,
-      -10000,
-      10000,
+      -Infinity,
+      Infinity,
       !isMaximisingPlayer,
       playerColor,
     );

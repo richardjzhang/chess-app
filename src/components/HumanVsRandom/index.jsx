@@ -105,6 +105,9 @@ const HumanVsRandom = ({ setGameIsOver }: Props) => {
       }}
       onSquareClick={onSquareClick}
       squareStyles={squareStyles}
+      dropSquareStyle={{
+        boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
+      }}
       transitionDuration={300}
     />
   );

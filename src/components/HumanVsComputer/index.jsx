@@ -1,9 +1,8 @@
 // @flow
-
 import React from 'react';
-import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import Chess from 'chess.js';
+import styled from '@emotion/styled';
 
 import { colors, fontWeight } from 'utils/theme';
 
@@ -11,16 +10,18 @@ import { minimaxRoot } from './helper';
 
 const DIFFICULTY = 3;
 
+const GameState = styled.div`
+  position: absolute;
+  top: 120px;
+  color: ${colors.cloudBurst};
+  font-size: 32px;
+  font-weight: ${fontWeight.semiBold};
+`;
+
 type Props = {
   setGameIsOver: () => void,
   setComputerIsThinking: () => void,
   setIsYourTurn: () => void,
-  children?: ({
-    position: string,
-    onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
-    squareStyles: Object,
-    onSquareClick: (square: string) => void,
-  }) => Node,
 };
 type State = {
   fen: string,
@@ -79,7 +80,6 @@ class HumanVsComputer extends React.Component<Props, State> {
     targetSquare: string,
   }) => {
     const { setComputerIsThinking } = this.props;
-    setComputerIsThinking();
     // see if the move is legal
     const move = this.game.move({
       from: sourceSquare,
@@ -89,6 +89,7 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     // illegal move
     if (move === null) return;
+    setComputerIsThinking();
 
     this.setState({ fen: this.game.fen() });
 
@@ -97,7 +98,6 @@ class HumanVsComputer extends React.Component<Props, State> {
 
   onSquareClick = (square: string) => {
     const { setComputerIsThinking } = this.props;
-    setComputerIsThinking();
     const { pieceSquare } = this.state;
     this.setState({
       squareStyles: { [square]: { backgroundColor: colors.cornflowerBlue } },
@@ -112,6 +112,7 @@ class HumanVsComputer extends React.Component<Props, State> {
 
     // illegal move
     if (move === null) return;
+    setComputerIsThinking();
 
     this.setState({ fen: this.game.fen() });
 
@@ -120,15 +121,23 @@ class HumanVsComputer extends React.Component<Props, State> {
 
   render() {
     const { fen, squareStyles } = this.state;
-    const { children } = this.props;
-
-    if (children == null) return null;
-    return children({
-      position: fen,
-      onDrop: this.onDrop,
-      onSquareClick: this.onSquareClick,
-      squareStyles,
-    });
+    return (
+      <Chessboard
+        id="humanVsComputer"
+        width={450}
+        position={fen}
+        onDrop={this.onDrop}
+        boardStyle={{
+          borderRadius: '5px',
+          boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+        }}
+        onSquareClick={this.onSquareClick}
+        squareStyles={squareStyles}
+        dropSquareStyle={{
+          boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
+        }}
+      />
+    );
   }
 }
 
@@ -146,40 +155,14 @@ export default function PlayComputerEngine() {
         setGameIsOver={setGameIsOver}
         setComputerIsThinking={setComputerIsThinking}
         setIsYourTurn={setIsYourTurn}
-      >
-        {({ position, onDrop, onSquareClick, squareStyles }) => (
-          <Chessboard
-            id="humanVsComputer"
-            width={450}
-            position={position}
-            onDrop={onDrop}
-            boardStyle={{
-              borderRadius: '5px',
-              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-            }}
-            onSquareClick={onSquareClick}
-            squareStyles={squareStyles}
-            dropSquareStyle={{
-              boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
-            }}
-          />
-        )}
-      </HumanVsComputer>
-      <div
-        style={{
-          position: 'absolute',
-          top: 120,
-          color: colors.cloudBurst,
-          fontSize: 32,
-          fontWeight: fontWeight.semiBold,
-        }}
-      >
+      />
+      <GameState>
         {isGameOver
           ? 'Game over!'
           : isThinking
           ? "I'm thinking..."
           : 'Your turn'}
-      </div>
+      </GameState>
     </React.Fragment>
   );
 }
