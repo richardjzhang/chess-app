@@ -2,7 +2,6 @@
 import React from 'react';
 import Chessboard from 'chessboardjsx';
 import Chess from 'chess.js';
-import styled from '@emotion/styled';
 
 import { colors } from 'utils/theme';
 
