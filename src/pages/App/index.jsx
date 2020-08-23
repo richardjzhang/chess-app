@@ -58,7 +58,9 @@ const Button = styled.div`
 
 type GameType = 'computer' | 'playRandom' | 'random';
 
-const OPTIONS = {
+const OPTIONS: {
+  [GameType]: string,
+} = {
   random: 'Random Moves',
   computer: 'Human vs Computer',
   playRandom: 'Human vs Dumb Computer',
