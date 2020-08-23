@@ -1,39 +1,6 @@
 // @flow
 import { getPieceValue } from './values';
 
-const convertFen = (fenArray: Array<string>) => {
-  // Transform into following format:
-  // [[{type: 'p', color: 'b'}, {type: 'q', color: 'b'}, ...], [...], ...]
-  const board = [[]];
-  let count = 0;
-  for (let i = 0; i < fenArray.length; i += 1) {
-    if (fenArray[i] === ' ') break;
-    if (!['/', '1', '2', '3', '4', '5', '6', '7', '8'].includes(fenArray[i])) {
-      if (fenArray[i] === fenArray[i].toUpperCase()) {
-        board[count].push({
-          type: fenArray[i].toLowerCase(),
-          color: 'w',
-        });
-      } else {
-        board[count].push({
-          type: fenArray[i],
-          color: 'b',
-        });
-      }
-    } else if (['1', '2', '3', '4', '5', '6', '7', '8'].includes(fenArray[i])) {
-      for (let j = 0; j < parseInt(fenArray[i], 10); j += 1) {
-        board[count].push(null);
-      }
-    }
-
-    if (fenArray[i] === '/') {
-      count += 1;
-      board[count] = [];
-    }
-  }
-  return board;
-};
-
 const evaluateBoard = (
   board: Array<
     Array<{
@@ -58,22 +25,29 @@ const evaluateBoard = (
   return value;
 };
 
-const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
+const minimax = (
+  depth: number,
+  game: any,
+  playerColor: string,
+  isMaximisingPlayer: boolean = false,
+  alpha: number = Number.NEGATIVE_INFINITY,
+  beta: number = Number.POSITIVE_INFINITY,
+) => {
   if (depth === 0) {
-    const board = convertFen(game.fen().split(''));
-    /* $FlowFixMe */
-    return evaluateBoard(board, playerColor);
+    return evaluateBoard(game.board(), playerColor);
   }
 
-  const newGameMoves = game.moves();
+  const possibleMoves = game.moves().sort(function(a, b) {
+    return 0.5 - Math.random();
+  });
 
   if (isMaximisingPlayer) {
     let bestMove = -Infinity;
-    newGameMoves.forEach(newGameMove => {
-      game.move(newGameMove);
+    possibleMoves.forEach(move => {
+      game.move(move);
       bestMove = Math.max(
         bestMove,
-        minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer, playerColor),
+        minimax(depth - 1, game, playerColor, !isMaximisingPlayer),
       );
       game.undo();
       const newAlpha = Math.max(alpha, bestMove);
@@ -82,11 +56,11 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
     return bestMove;
   }
   let bestMove = Infinity;
-  newGameMoves.forEach(newGameMove => {
-    game.move(newGameMove);
+  possibleMoves.forEach(move => {
+    game.move(move);
     bestMove = Math.min(
       bestMove,
-      minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer, playerColor),
+      minimax(depth - 1, game, playerColor, !isMaximisingPlayer),
     );
     game.undo();
     const newBeta = Math.min(beta, bestMove);
@@ -98,27 +72,20 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer, playerColor) => {
 export const minimaxRoot = (
   depth: number,
   game: Object,
-  isMaximisingPlayer: boolean,
   playerColor: string,
+  isMaximisingPlayer: boolean,
 ) => {
-  const newGameMoves = game.moves();
+  const possibleMoves = game.moves();
   let bestMove = -Infinity;
   let bestMoveFound;
 
-  newGameMoves.forEach(newGameMove => {
-    game.move(newGameMove);
-    const value = minimax(
-      depth - 1,
-      game,
-      -Infinity,
-      Infinity,
-      !isMaximisingPlayer,
-      playerColor,
-    );
+  possibleMoves.forEach(move => {
+    game.move(move);
+    const value = minimax(depth - 1, game, playerColor, !isMaximisingPlayer);
     game.undo();
     if (value >= bestMove) {
       bestMove = value;
-      bestMoveFound = newGameMove;
+      bestMoveFound = move;
     }
   });
   return bestMoveFound;

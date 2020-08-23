@@ -7,7 +7,7 @@ import { colors } from 'utils/theme';
 
 import { minimaxRoot } from './helper';
 
-const DIFFICULTY = 3;
+const DEPTH = 3;
 
 type Props = {|
   setGameIsOver: () => void,
@@ -52,7 +52,7 @@ class HumanVsComputer extends React.Component<Props, State> {
     }
     const { setIsYourTurn } = this.props;
 
-    const bestMove = minimaxRoot(DIFFICULTY, this.game, true, 'b');
+    const bestMove = minimaxRoot(DEPTH, this.game, 'b', true);
     this.game.move(bestMove);
     this.setState(state => ({
       ...state,
