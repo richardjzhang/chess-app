@@ -2,25 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
-import styled from '@emotion/styled';
 
-import { colors, fontWeight } from 'utils/theme';
-
-const game = new Chess();
-
-const GameState = styled.div`
-  position: absolute;
-  top: 120px;
-  color: ${colors.cloudBurst};
-  font-size: 32px;
-  font-weight: ${fontWeight.semiBold};
-`;
-
-type Props = {
+type Props = {|
+  game: any,
   setGameIsOver: () => void,
-};
+  width: number,
+|};
 
-const RandomVsRandom = ({ setGameIsOver }: Props) => {
+const RandomVsRandom = ({ game, setGameIsOver, width }: Props) => {
   const [fen, setFen] = useState('start');
 
   const makeRandomMove = () => {
@@ -48,8 +37,8 @@ const RandomVsRandom = ({ setGameIsOver }: Props) => {
 
   return (
     <Chessboard
-      width={450}
       id="random"
+      width={width}
       position={fen}
       transitionDuration={500}
       boardStyle={{
@@ -61,15 +50,18 @@ const RandomVsRandom = ({ setGameIsOver }: Props) => {
   );
 };
 
-const RandomVsRandomGame = () => {
-  const [isGameOver, setIsGameOver] = React.useState(false);
-  const setGameIsOver = () => setIsGameOver(true);
-
+const RandomVsRandomGame = ({
+  isGameOver,
+  setGameIsOver,
+  width,
+}: {|
+  isGameOver: boolean,
+  setGameIsOver: () => void,
+  width: number,
+|}) => {
+  const game = new Chess();
   return (
-    <React.Fragment>
-      <RandomVsRandom setGameIsOver={setGameIsOver} />
-      <GameState>{isGameOver ? 'Game over!' : "We're not very good"}</GameState>
-    </React.Fragment>
+    <RandomVsRandom game={game} setGameIsOver={setGameIsOver} width={width} />
   );
 };
 

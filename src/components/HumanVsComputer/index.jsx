@@ -4,25 +4,18 @@ import Chessboard from 'chessboardjsx';
 import Chess from 'chess.js';
 import styled from '@emotion/styled';
 
-import { colors, fontWeight } from 'utils/theme';
+import { colors } from 'utils/theme';
 
 import { minimaxRoot } from './helper';
 
 const DIFFICULTY = 3;
 
-const GameState = styled.div`
-  position: absolute;
-  top: 120px;
-  color: ${colors.cloudBurst};
-  font-size: 32px;
-  font-weight: ${fontWeight.semiBold};
-`;
-
-type Props = {
+type Props = {|
   setGameIsOver: () => void,
   setComputerIsThinking: () => void,
   setIsYourTurn: () => void,
-};
+  width: number,
+|};
 type State = {
   fen: string,
   squareStyles: Object,
@@ -124,10 +117,11 @@ class HumanVsComputer extends React.Component<Props, State> {
 
   render() {
     const { fen, squareStyles } = this.state;
+    const { width } = this.props;
     return (
       <Chessboard
         id="humanVsComputer"
-        width={450}
+        width={width}
         position={fen}
         onDrop={this.onDrop}
         boardStyle={{
@@ -145,28 +139,25 @@ class HumanVsComputer extends React.Component<Props, State> {
   }
 }
 
-export default function PlayComputerEngine() {
-  const [isGameOver, setIsGameOver] = React.useState(false);
-  const [isThinking, setIsThinking] = React.useState(false);
-
-  const setGameIsOver = () => setIsGameOver(true);
-  const setIsYourTurn = () => setIsThinking(false);
-  const setComputerIsThinking = () => setIsThinking(true);
-
+export default function PlayComputerEngine({
+  isGameOver,
+  setGameIsOver,
+  setComputerIsThinking,
+  setIsYourTurn,
+  width,
+}: {|
+  isGameOver: boolean,
+  setGameIsOver: () => void,
+  setComputerIsThinking: () => void,
+  setIsYourTurn: () => void,
+  width: number,
+|}) {
   return (
-    <React.Fragment>
-      <HumanVsComputer
-        setGameIsOver={setGameIsOver}
-        setComputerIsThinking={setComputerIsThinking}
-        setIsYourTurn={setIsYourTurn}
-      />
-      <GameState>
-        {isGameOver
-          ? 'Game over!'
-          : isThinking
-          ? "I'm thinking..."
-          : 'Your turn'}
-      </GameState>
-    </React.Fragment>
+    <HumanVsComputer
+      setGameIsOver={setGameIsOver}
+      setComputerIsThinking={setComputerIsThinking}
+      setIsYourTurn={setIsYourTurn}
+      width={width}
+    />
   );
 }

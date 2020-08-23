@@ -3,21 +3,34 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-import { colors, fontSize, gutters } from 'utils/theme';
-import Random from 'components/Random';
+import { colors, fontSize, fontWeight, gutters } from 'utils/theme';
+import Media from 'components/Media.jsx';
+import Random from 'components/Random.jsx';
 import Computer from 'components/HumanVsComputer';
-import HumanVsRandom from 'components/HumanVsRandom';
+import HumanVsRandom from 'components/HumanVsRandom.jsx';
+
+const GameState = styled.div`
+  margin-bottom: 60px;
+  display: flex;
+  justify-content: center;
+  color: ${colors.cloudBurst};
+  font-size: 32px;
+  font-weight: ${fontWeight.semiBold};
+`;
 
 const Root = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 120px;
   height: 100vh;
   background-color: ${colors.cupid};
 `;
 
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const ChessContainer = styled.div`
-  margin-right: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,73 +56,141 @@ const Button = styled.div`
   padding: 0 ${gutters.medium}px;
 `;
 
-type Props = {};
+type GameType = 'computer' | 'playRandom' | 'random';
 
-type State = {
-  type: string,
-  options: {
-    [string]: string,
-  },
+const OPTIONS = {
+  random: 'Random Moves',
+  computer: 'Human vs Computer',
+  playRandom: 'Human vs Dumb Computer',
 };
 
-class App extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      type: 'random',
-      options: {
-        random: 'Random Moves',
-        computer: 'Human vs Computer',
-        playRandom: 'Human vs Dumb Computer',
-      },
-    };
+const Chess = ({
+  gameType,
+  isGameOver,
+  setGameIsOver,
+  setComputerIsThinking,
+  setIsYourTurn,
+  width,
+}: {|
+  gameType: GameType,
+  isGameOver: boolean,
+  setGameIsOver: () => void,
+  setComputerIsThinking: () => void,
+  setIsYourTurn: () => void,
+  width: number,
+|}) => {
+  switch (gameType) {
+    case 'computer':
+      return (
+        <Computer
+          width={width}
+          isGameOver={isGameOver}
+          setGameIsOver={setGameIsOver}
+          setComputerIsThinking={setComputerIsThinking}
+          setIsYourTurn={setIsYourTurn}
+        />
+      );
+    case 'playRandom':
+      return (
+        <HumanVsRandom
+          width={width}
+          isGameOver={isGameOver}
+          setGameIsOver={setGameIsOver}
+        />
+      );
+    case 'random':
+      return (
+        <Random
+          width={width}
+          isGameOver={isGameOver}
+          setGameIsOver={setGameIsOver}
+        />
+      );
+    default:
+      throw new Error('No such option');
   }
+};
 
-  changeGameType = (type: string) => {
-    this.setState({
-      type,
-    });
-  };
+const getTitle = ({
+  gameType,
+  isGameOver,
+  isThinking,
+}: {|
+  gameType: GameType,
+  isGameOver: boolean,
+  isThinking: boolean,
+|}) => {
+  switch (gameType) {
+    case 'computer':
+      if (isGameOver) return 'Game Over!';
+      if (isThinking) return "I'm thinking...";
+      return 'Your turn';
+    case 'playRandom':
+      return "I'm not very smart";
+    case 'random':
+      return "We're not very smart!";
+    default:
+      throw new Error('No such option');
+  }
+};
 
-  render() {
-    const { type, options } = this.state;
-    const Chess = () => {
-      switch (type) {
-        case 'computer':
-          return <Computer />;
-        case 'playRandom':
-          return <HumanVsRandom />;
-        case 'random':
-          return <Random />;
-        default:
-          throw new Error('No such option');
-      }
-    };
-    return (
-      <React.Fragment>
-        <Root>
-          <ChessContainer>
-            <Chess />
-          </ChessContainer>
-          <ButtonsContainer>
-            {Object.keys(options).map(key => (
-              <Button
-                key={key}
+const App = () => {
+  const [gameType, setGameType] = React.useState('random');
+  const [isGameOver, setIsGameOver] = React.useState(false);
+  const [isThinking, setIsThinking] = React.useState(false);
+  const setIsYourTurn = () => setIsThinking(false);
+  const setComputerIsThinking = () => setIsThinking(true);
+  const setGameIsOver = () => setIsGameOver(true);
+
+  return (
+    <div>
+      <Media query={`(min-width: 900px)`}>
+        {isDesktopView => (
+          <Root>
+            <GameState>
+              {getTitle({ gameType, isGameOver, isThinking })}
+            </GameState>
+            <Content
+              style={{ flexDirection: isDesktopView ? 'row' : 'column' }}
+            >
+              <ChessContainer
                 style={{
-                  color: type === key ? colors.white : colors.cloudBurst,
-                  backgroundColor:
-                    type === key ? colors.dodgerBlue : colors.white,
+                  ...(isDesktopView
+                    ? { marginRight: 60 }
+                    : { marginBottom: 60 }),
                 }}
-                onClick={() => this.changeGameType(key)}
               >
-                {options[key]}
-              </Button>
-            ))}
-          </ButtonsContainer>
-        </Root>
-      </React.Fragment>
-    );
-  }
-}
+                <Chess
+                  gameType={gameType}
+                  width={isDesktopView ? 450 : 350}
+                  isGameOver={isGameOver}
+                  setGameIsOver={setGameIsOver}
+                  setComputerIsThinking={setComputerIsThinking}
+                  setIsYourTurn={setIsYourTurn}
+                />
+              </ChessContainer>
+              <ButtonsContainer>
+                {Object.keys(OPTIONS).map(key => (
+                  <Button
+                    key={key}
+                    style={{
+                      color:
+                        gameType === key ? colors.white : colors.cloudBurst,
+                      backgroundColor:
+                        gameType === key ? colors.dodgerBlue : colors.white,
+                    }}
+                    onClick={() => setGameType(key)}
+                  >
+                    {OPTIONS[key]}
+                  </Button>
+                ))}
+              </ButtonsContainer>
+            </Content>
+          </Root>
+        )}
+      </Media>
+    </div>
+  );
+};
 
 export default App;
