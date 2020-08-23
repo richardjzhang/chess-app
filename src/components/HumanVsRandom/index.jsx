@@ -108,7 +108,7 @@ const HumanVsRandom = ({ setGameIsOver }: Props) => {
       dropSquareStyle={{
         boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
       }}
-      transitionDuration={300}
+      transitionDuration={500}
     />
   );
 };

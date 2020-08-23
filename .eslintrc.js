@@ -1,12 +1,10 @@
 module.exports = {
   extends: [
-    'airbnb-base',
-    'mathspace',
+    'react-app',
     'prettier',
     'prettier/flowtype',
     'prettier/react',
     'plugin:react/recommended',
-    "plugin:flowtype/recommended",
   ],
   parser: 'babel-eslint',
   plugins: ['flowtype', 'prettier', 'import', 'module-resolver'],

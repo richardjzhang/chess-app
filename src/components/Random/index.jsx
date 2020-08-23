@@ -51,7 +51,7 @@ const RandomVsRandom = ({ setGameIsOver }: Props) => {
       width={450}
       id="random"
       position={fen}
-      transitionDuration={300}
+      transitionDuration={500}
       boardStyle={{
         borderRadius: '5px',
         boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,

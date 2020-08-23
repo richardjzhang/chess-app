@@ -136,6 +136,7 @@ class HumanVsComputer extends React.Component<Props, State> {
         dropSquareStyle={{
           boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
         }}
+        transitionDuration={500}
       />
     );
   }
