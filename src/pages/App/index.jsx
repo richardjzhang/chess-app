@@ -10,7 +10,6 @@ import Computer from 'components/HumanVsComputer';
 import HumanVsRandom from 'components/HumanVsRandom.jsx';
 
 const GameState = styled.div`
-  margin-bottom: 60px;
   display: flex;
   justify-content: center;
   color: ${colors.cloudBurst};
@@ -19,10 +18,7 @@ const GameState = styled.div`
 `;
 
 const Root = styled.div`
-  padding: 120px;
   box-sizing: border-box;
-  height: 100vh;
-  background-color: ${colors.cupid};
 `;
 
 const Content = styled.div`
@@ -131,7 +127,7 @@ const getTitle = ({
     case 'playRandom':
       return "I'm not very smart";
     case 'random':
-      return "We're not very smart!";
+      return "We're not very smart";
     default:
       throw new Error('No such option');
   }
@@ -146,11 +142,16 @@ const App = () => {
   const setGameIsOver = () => setIsGameOver(true);
 
   return (
-    <div>
+    <React.Fragment>
       <Media query={`(min-width: 900px)`}>
         {isDesktopView => (
-          <Root>
-            <GameState style={{ fontSize: isDesktopView ? 32 : 24 }}>
+          <Root style={{ padding: isDesktopView ? 120 : 60 }}>
+            <GameState
+              style={{
+                marginBottom: isDesktopView ? 60 : 40,
+                fontSize: isDesktopView ? 32 : 24,
+              }}
+            >
               {getTitle({ gameType, isGameOver, isThinking })}
             </GameState>
             <Content
@@ -192,7 +193,7 @@ const App = () => {
           </Root>
         )}
       </Media>
-    </div>
+    </React.Fragment>
   );
 };
 
