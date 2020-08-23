@@ -1,24 +1,26 @@
 // @flow
-
 import React, { useEffect, useState } from 'react';
-import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
+import styled from '@emotion/styled';
 
 import { colors, fontWeight } from 'utils/theme';
 
+const game = new Chess();
+
+const GameState = styled.div`
+  position: absolute;
+  top: 120px;
+  color: ${colors.cloudBurst};
+  font-size: 32px;
+  font-weight: ${fontWeight.semiBold};
+`;
+
 type Props = {
-  game: any,
   setGameIsOver: () => void,
-  children?: ({
-    position: string,
-    onDrop: ({ sourceSquare: string, targetSquare: string }) => void,
-    squareStyles: Object,
-    onSquareClick: (square: string) => void,
-  }) => Node,
 };
 
-const HumanVsRandom = ({ game, setGameIsOver, children }: Props) => {
+const HumanVsRandom = ({ setGameIsOver }: Props) => {
   const [computerMove, setComputerMove] = useState(false);
   const [fen, setFen] = useState('start');
   const [squareStyles, setSquareStyles] = useState({});
@@ -91,49 +93,31 @@ const HumanVsRandom = ({ game, setGameIsOver, children }: Props) => {
     [computerMove],
   );
 
-  if (children == null) return null;
-  return children({
-    position: fen,
-    onDrop,
-    onSquareClick,
-    squareStyles,
-  });
+  return (
+    <Chessboard
+      width={450}
+      id="humanVsRandom"
+      position={fen}
+      onDrop={onDrop}
+      boardStyle={{
+        borderRadius: '5px',
+        boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+      }}
+      onSquareClick={onSquareClick}
+      squareStyles={squareStyles}
+      transitionDuration={300}
+    />
+  );
 };
 
 const PlayRandomMoveEngine = () => {
-  const game = new Chess();
   const [isGameOver, setIsGameOver] = React.useState(false);
   const setGameIsOver = () => setIsGameOver(true);
 
   return (
     <React.Fragment>
-      <HumanVsRandom game={game} setGameIsOver={setGameIsOver}>
-        {({ position, onDrop, onSquareClick, squareStyles }) => (
-          <Chessboard
-            width={450}
-            id="humanVsRandom"
-            position={position}
-            onDrop={onDrop}
-            boardStyle={{
-              borderRadius: '5px',
-              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-            }}
-            onSquareClick={onSquareClick}
-            squareStyles={squareStyles}
-          />
-        )}
-      </HumanVsRandom>
-      <div
-        style={{
-          position: 'absolute',
-          top: 120,
-          color: colors.cloudBurst,
-          fontSize: 32,
-          fontWeight: fontWeight.semiBold,
-        }}
-      >
-        {isGameOver ? 'Game over!' : "I'm not very good!"}
-      </div>
+      <HumanVsRandom setGameIsOver={setGameIsOver} />
+      <GameState>{isGameOver ? 'Game over!' : "I'm not very good!"}</GameState>
     </React.Fragment>
   );
 };

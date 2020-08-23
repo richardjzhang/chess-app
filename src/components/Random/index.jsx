@@ -1,18 +1,26 @@
 // @flow
 import React, { useEffect, useState } from 'react';
-import type { Node } from 'react';
 import Chessboard from 'chessboardjsx';
 import * as Chess from 'chess.js';
+import styled from '@emotion/styled';
 
 import { colors, fontWeight } from 'utils/theme';
 
+const game = new Chess();
+
+const GameState = styled.div`
+  position: absolute;
+  top: 120px;
+  color: ${colors.cloudBurst};
+  font-size: 32px;
+  font-weight: ${fontWeight.semiBold};
+`;
+
 type Props = {
-  game: any,
   setGameIsOver: () => void,
-  children?: ({ position: string }) => Node,
 };
 
-const RandomVsRandom = ({ game, setGameIsOver, children }: Props) => {
+const RandomVsRandom = ({ setGameIsOver }: Props) => {
   const [fen, setFen] = useState('start');
 
   const makeRandomMove = () => {
@@ -38,42 +46,28 @@ const RandomVsRandom = ({ game, setGameIsOver, children }: Props) => {
     return () => window.clearInterval(interval);
   }, []);
 
-  if (children == null) return null;
-  return children({ position: fen });
+  return (
+    <Chessboard
+      width={450}
+      id="random"
+      position={fen}
+      transitionDuration={300}
+      boardStyle={{
+        borderRadius: '5px',
+        boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+      }}
+    />
+  );
 };
 
 const RandomVsRandomGame = () => {
-  const game = new Chess();
   const [isGameOver, setIsGameOver] = React.useState(false);
   const setGameIsOver = () => setIsGameOver(true);
 
   return (
     <React.Fragment>
-      <RandomVsRandom game={game} setGameIsOver={setGameIsOver}>
-        {({ position }) => (
-          <Chessboard
-            width={450}
-            id="random"
-            position={position}
-            transitionDuration={300}
-            boardStyle={{
-              borderRadius: '5px',
-              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-            }}
-          />
-        )}
-      </RandomVsRandom>
-      <div
-        style={{
-          position: 'absolute',
-          top: 120,
-          color: colors.cloudBurst,
-          fontSize: 32,
-          fontWeight: fontWeight.semiBold,
-        }}
-      >
-        {isGameOver ? 'Game over!' : "We're not very good"}
-      </div>
+      <RandomVsRandom setGameIsOver={setGameIsOver} />
+      <GameState>{isGameOver ? 'Game over!' : "We're not very good"}</GameState>
     </React.Fragment>
   );
 };

@@ -16,7 +16,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-flow": "^6.23.0",
-    "chess.js": "^0.10.2",
+    "chess.js": "^0.10.3",
     "chessboardjsx": "^2.2.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-airbnb-base": "^13.0.0",
