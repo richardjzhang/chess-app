@@ -162,7 +162,6 @@ export default function PlayComputerEngine() {
             dropSquareStyle={{
               boxShadow: `inset 0 0 1px 4px ${colors.cornflowerBlue}`,
             }}
-            showNotation={false}
           />
         )}
       </HumanVsComputer>

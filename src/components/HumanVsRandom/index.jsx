@@ -40,6 +40,11 @@ const HumanVsRandom = ({ game, setGameIsOver, children }: Props) => {
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
     game.move(possibleMoves[randomIndex]);
     setFen(game.fen());
+    setSquareStyles({
+      [game.history({ verbose: true })[game.history().length - 1].to]: {
+        backgroundColor: colors.cornflowerBlue,
+      },
+    });
     setComputerMove(false);
   };
 
@@ -59,7 +64,7 @@ const HumanVsRandom = ({ game, setGameIsOver, children }: Props) => {
   };
 
   const onSquareClick = square => {
-    setSquareStyles({ [square]: { backgroundColor: 'DarkTurquoise' } });
+    setSquareStyles({ [square]: { backgroundColor: colors.cornflowerBlue } });
     setPieceSquare(square);
 
     const move = game.move({
