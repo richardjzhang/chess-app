@@ -1,10 +1,6 @@
 # Chess App
 This project runs a simple chess application run using a minmax alpha-beta pruning algorithm.
 
-This project is my personal website. It's pretty barebones at the moment and has gone through a few iterations.
-
-If you're interested in using it as a template feel free to fork the repo.
-
 ## To start the project
 
 In the project directory, you can run:
