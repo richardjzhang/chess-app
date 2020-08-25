@@ -18,6 +18,7 @@ const GameState = styled.div`
 `;
 
 const Root = styled.div`
+  height: 100%;
   box-sizing: border-box;
 `;
 
@@ -53,14 +54,19 @@ const Button = styled.div`
   padding: 0 ${gutters.medium}px;
 `;
 
+const Separator = styled.div`
+  height: 60px;
+  width: 60px;
+`;
+
 type GameType = 'computer' | 'playRandom' | 'random';
 
 const OPTIONS: {
   [GameType]: string,
 } = {
-  random: 'Random Moves',
   computer: 'Human vs Computer',
   playRandom: 'Human vs Dumb Computer',
+  random: 'Random Moves',
 };
 
 const Chess = ({
@@ -134,7 +140,7 @@ const getTitle = ({
 };
 
 const App = () => {
-  const [gameType, setGameType] = React.useState('random');
+  const [gameType, setGameType] = React.useState('computer');
   const [isGameOver, setIsGameOver] = React.useState(false);
   const [isThinking, setIsThinking] = React.useState(false);
   const setIsYourTurn = () => setIsThinking(false);
@@ -145,7 +151,19 @@ const App = () => {
     <React.Fragment>
       <Media query={`(min-width: 900px)`}>
         {isDesktopView => (
-          <Root style={{ padding: isDesktopView ? 120 : 60 }}>
+          <Root
+            style={{
+              padding: isDesktopView ? 120 : 60,
+              ...(!isDesktopView
+                ? {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }
+                : {}),
+            }}
+          >
             <GameState
               style={{
                 marginBottom: isDesktopView ? 60 : 40,
@@ -154,16 +172,8 @@ const App = () => {
             >
               {getTitle({ gameType, isGameOver, isThinking })}
             </GameState>
-            <Content
-              style={{ flexDirection: isDesktopView ? 'row' : 'column' }}
-            >
-              <ChessContainer
-                style={{
-                  ...(isDesktopView
-                    ? { marginRight: 60 }
-                    : { marginBottom: 60 }),
-                }}
-              >
+            <Content>
+              <ChessContainer>
                 <Chess
                   gameType={gameType}
                   width={isDesktopView ? 450 : 350}
@@ -173,22 +183,27 @@ const App = () => {
                   setIsYourTurn={setIsYourTurn}
                 />
               </ChessContainer>
-              <ButtonsContainer>
-                {Object.keys(OPTIONS).map(key => (
-                  <Button
-                    key={key}
-                    style={{
-                      color:
-                        gameType === key ? colors.white : colors.cloudBurst,
-                      backgroundColor:
-                        gameType === key ? colors.dodgerBlue : colors.white,
-                    }}
-                    onClick={() => setGameType(key)}
-                  >
-                    {OPTIONS[key]}
-                  </Button>
-                ))}
-              </ButtonsContainer>
+              {isDesktopView && (
+                <React.Fragment>
+                  <Separator />
+                  <ButtonsContainer>
+                    {Object.keys(OPTIONS).map(key => (
+                      <Button
+                        key={key}
+                        style={{
+                          color:
+                            gameType === key ? colors.white : colors.cloudBurst,
+                          backgroundColor:
+                            gameType === key ? colors.dodgerBlue : colors.white,
+                        }}
+                        onClick={() => setGameType(key)}
+                      >
+                        {OPTIONS[key]}
+                      </Button>
+                    ))}
+                  </ButtonsContainer>
+                </React.Fragment>
+              )}
             </Content>
           </Root>
         )}

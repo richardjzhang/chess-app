@@ -42,7 +42,7 @@ const minimax = (
   });
 
   if (isMaximisingPlayer) {
-    let bestMove = -Infinity;
+    let bestMove = Number.NEGATIVE_INFINITY;
     possibleMoves.forEach(move => {
       game.move(move);
       bestMove = Math.max(
@@ -50,12 +50,11 @@ const minimax = (
         minimax(depth - 1, game, playerColor, !isMaximisingPlayer),
       );
       game.undo();
-      const newAlpha = Math.max(alpha, bestMove);
-      if (beta <= newAlpha) return bestMove;
+      if (beta <= Math.max(alpha, bestMove)) return bestMove;
     });
     return bestMove;
   }
-  let bestMove = Infinity;
+  let bestMove = Number.POSITIVE_INFINITY;
   possibleMoves.forEach(move => {
     game.move(move);
     bestMove = Math.min(
@@ -63,8 +62,7 @@ const minimax = (
       minimax(depth - 1, game, playerColor, !isMaximisingPlayer),
     );
     game.undo();
-    const newBeta = Math.min(beta, bestMove);
-    if (newBeta <= alpha) return bestMove;
+    if (Math.min(beta, bestMove) <= alpha) return bestMove;
   });
   return bestMove;
 };
@@ -75,8 +73,10 @@ export const minimaxRoot = (
   playerColor: string,
   isMaximisingPlayer: boolean,
 ) => {
-  const possibleMoves = game.moves();
-  let bestMove = -Infinity;
+  const possibleMoves = game.moves().sort(function(a, b) {
+    return 0.5 - Math.random();
+  });
+  let bestMove = Number.NEGATIVE_INFINITY;
   let bestMoveFound;
 
   possibleMoves.forEach(move => {
