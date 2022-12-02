@@ -1,3 +1,6 @@
+# DEPRECATED
+This chess app is out of date and currently in the process of being reworked
+
 # Chess App
 This project runs a simple chess application run using a minmax alpha-beta pruning algorithm.
 
